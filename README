@@ -1,0 +1,50 @@
+Duta Viorel-Ionut, 331CB
+Punctaj checker: 1.5/1.5
+
+
+Observatie:
+
+    Pentru a facilita corectarea, am separat scheletul temei de rezolvarea acesteia si am urmat pasii prezentati
+in enuntul temei.
+
+
+Parsare regex (string in regex: parse.py):
+
+    Functia str_to_regex(str) face parsarea propriu-zisa (iterativ pana la simbolul "(" cand apelez functia recursiv
+pana la ")"). Din cauza ca pot exista paranteze deschise in interiorul altor paranteze, functia str_to_regex intoarce
+numarul de paranteze deschise (o solutie barbara, dar isi face treaba).
+    Pentru a deosebi anumite operatii intre ele ma golosesc de mai multe flag-uri (f1-f4) astfel: f1 e folosit pentru
+operatia ALTERNATION, f2 pentru SYMBOL_SET (functia symbol_set se ocupa de parsarea pentru SYMBOL_SET), f3 pentru
+RANGE, iar f4 pentru apelurile recursive "(...)".
+    Daca dupa un apel recursiv se afla "*", "?" sau "+", operatia este aplicata pe regex-ul dintre paranteze, iar in caz
+contrar doar pe ultimul simbol. Fiecare simbol nou citit este adaugat la raspuns prin concatenare.
+
+
+Normalizare la expresie regulata (regex_to_re: convert.py):
+
+    Normalizarea se face recursiv, calculez lhs si rhs atunci cand este cazul. Implementarea nu este una complicata,
+regexul fiind usor de transformat in expresie regulata. Din cauza import-ului din python trebuie sa folosesc numere
+pentru expresii regulate (EMPTY_SET = 0 etc.).
+
+
+Conversie la Automat Finit Nedeterminist (re_to_nfa: convert.py):
+
+    Acest pas a fost rezolvat la tema de casa de la laborator. Singura modificare a fost schimbarea tipului exprimat
+prin variabile in numere intregi (din cauza implementarii acestui pas in fisierul sursa convert.py).
+
+
+Conversie la Automat Finit Determinist (nfa_to_dfa: automat_convert.py):
+
+    Primul pas in rezolvarea acestei etape este calcularea starilor in care se poate ajunge cu o tranzitie pe sirul
+vid. Fiecare automat are garbage stat unde ajunge cand primeste o tranzitie nedefinita.
+    Pornind de la starea initiala a automatului nedeterminist, calculez noile stari in care pot sa ajung in dfa si
+adaug toate tranzitiile posibile in dfa.delta. Pentru ca starile automatului determinist sunt numere intregi, nu
+multimi, pastrez o corespondenta intre starea reala si starea din algoritm.
+    Starile finale ale dfa sunt calculate ca in algoritm, verific daca starile finale ale nfa se afla in starea
+corespunzatoare automatului determinist.
+
+
+Simularea rularii AFD-ului pe un sir (run_dfa: automat_convert.py):
+
+    Parcurg cuvantul de la stanga la dreapta si la final verific daca sunt intr-o stare finala. Atat timp cat simbolul
+exista in alfabet, o sa existe si o tranzitie pe acel simbol in automatul determinist.
